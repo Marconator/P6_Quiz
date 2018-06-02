@@ -228,16 +228,16 @@ exports.check = (req, res, next) => {
     });
 };
 
-exports.random_play = (req,res,next) =>{
-    req.session.random_play = req.session.random_play || [];
+exports.randomplay = (req,res,next) =>{
+    req.session.randomplay = req.session.randomplay || [];
 
-    const whereOpt = {'id':{[Sequelize.Op.notIn]: req.session.random_play}};
+    const whereOpt = {'id':{[Sequelize.Op.notIn]: req.session.randomplay}};
 
     models.quiz.count({where:whereOpt})
         .then(function (count) {
             if(!count){
-                const score = req.session.random_play.length;
-                req.session.random_play = [];
+                const score = req.session.randomplay.length;
+                req.session.randomplay = [];
                 res.render('quizzes/random_none',{
                     score:score
                 });
@@ -255,9 +255,9 @@ exports.random_play = (req,res,next) =>{
 
         })
         .then(function (quiz) {
-            res.render('quizzes/random_play',{
+            res.render('quizzes/randomplay',{
                 quiz: quiz,
-                score: req.session.random_play.length
+                score: req.session.randomplay.length
             });
 
         })
@@ -274,11 +274,11 @@ exports.randomcheck = (req, res, next) => {
     const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
 
     if(result){
-        if(req.session.random_play.indexOf(req.quiz.id)=== -1){
-            req.session.random_play = req.session.random_play.concat(quiz.id);
+        if(req.session.randomplay.indexOf(req.quiz.id)=== -1){
+            req.session.randomplay = req.session.randomplay.concat(quiz.id);
         }
     }
-    const score = req.session.random_play.length;
+    const score = req.session.randomplay.length;
     res.render('quizzes/random_result', {
         result,
         answer,
@@ -307,7 +307,7 @@ exports.randomplay=(req,res,next)=>{
         })
         .then(quiz=>{
             let score =req.session.randomplay.length;
-            res.render('quizzes/random_play',{quiz,score});
+            res.render('quizzes/randomplay',{quiz,score});
         })
 
         .catch(error=>{
