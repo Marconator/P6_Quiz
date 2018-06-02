@@ -85,11 +85,24 @@ router.put('/users/:userId(\\d+)',
     sessionController.loginRequired,
     sessionController.adminOrMyselfRequired,
 	userController.update);
+
+
 router.delete('/users/:userId(\\d+)',
     sessionController.loginRequired,
     sessionController.adminOrMyselfRequired,
 	userController.destroy);
 
+router.post('/quizzes/:quizId(\\d+)/tips',
+    sessionController.loginRequired,
+    tipController.create);
+router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/accept',
+    sessionController.loginRequired,
+    quizController.adminOrAuthorRequired,
+    tipController.accept);
+router.delete('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
+    sessionController.loginRequired,
+    quizController.adminOrAuthorRequired,
+    tipController.destroy);
 
 router.get('/users/:userId(\\d+)/quizzes',
     sessionController.loginRequired,
@@ -126,7 +139,15 @@ router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
 router.get('/quizzes/randomplay', quizController.randomplay);
 router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
 
-
+// Routes P8_Quiz
+router.get('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)/edit',
+    sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,
+    tipController.edit);
+router.put('/quizzes/:quizId(\\d+)/tips/:tipId(\\d+)',
+    sessionController.loginRequired,
+    tipController.adminOrAuthorRequired,
+    tipController.update);
 
 router.post('/quizzes/:quizId(\\d+)/tips',
     sessionController.loginRequired,
