@@ -70,11 +70,13 @@ router.get('/users',
 	userController.index);
 router.get('/users/:userId(\\d+)',
     sessionController.loginRequired,
-	userController.show);
+	userController.show); 
+
 router.get('/users/new',
 	userController.new);
 router.post('/users',
 	userController.create);
+
 router.get('/users/:userId(\\d+)/edit',
     sessionController.loginRequired,
     sessionController.adminOrMyselfRequired,
@@ -88,10 +90,10 @@ router.delete('/users/:userId(\\d+)',
     sessionController.adminOrMyselfRequired,
 	userController.destroy);
 
+
 router.get('/users/:userId(\\d+)/quizzes',
     sessionController.loginRequired,
     quizController.index);
-
 
 // Routes for the resource /quizzes
 router.get('/quizzes',
@@ -117,8 +119,12 @@ router.delete('/quizzes/:quizId(\\d+)',
     quizController.adminOrAuthorRequired,
 	quizController.destroy);
 
+
 router.get('/quizzes/:quizId(\\d+)/play',  quizController.play);
 router.get('/quizzes/:quizId(\\d+)/check', quizController.check);
+
+router.get('/quizzes/random_play', quizController.random_play);
+router.get('/quizzes/randomcheck/:quizId(\\d+)', quizController.randomcheck);
 
 
 

@@ -9,7 +9,9 @@ exports.load = (req, res, next, quizId) => {
 
     models.quiz.findById(quizId, {
         include: [
-            models.tip,
+            {model: models.tip,
+                include:[
+                    {model: models.user, as: 'author'}]},
             {model: models.user, as: 'author'}
         ]
     })
@@ -223,5 +225,63 @@ exports.check = (req, res, next) => {
         quiz,
         result,
         answer
+    });
+};
+
+exports.random_play = (req,res,next) =>{
+    req.session.random_play = req.session.random_play || [];
+
+    const whereOpt = {'id':{[Sequelize.Op.notIn]: req.session.random_play}};
+
+    models.quiz.count({where:whereOpt})
+        .then(function (count) {
+            if(!count){
+                const score = req.session.random_play.length;
+                req.session.random_play = [];
+                res.render('quizzes/random_none',{
+                    score:score
+                });
+
+            };
+            return models.quiz.findAll({
+                where: whereOpt,
+                offset: Math.floor(Math.random()*count),
+                limit: 1
+            })
+                .then(function (quizzes) {
+                    return quizzes[0];
+
+                });
+
+        })
+        .then(function (quiz) {
+            res.render('quizzes/random_play',{
+                quiz: quiz,
+                score: req.session.random_play.length
+            });
+
+        })
+        .catch(function (error) {
+            next(error);
+        });
+};
+
+exports.randomcheck = (req, res, next) => {
+
+    const {quiz, query} = req;
+
+    const answer = query.answer || "";
+    const result = answer.toLowerCase().trim() === quiz.answer.toLowerCase().trim();
+
+    if(result){
+        if(req.session.random_play.indexOf(req.quiz.id)=== -1){
+            req.session.random_play = req.session.random_play.concat(quiz.id);
+        }
+    }
+    const score = req.session.random_play.length;
+    res.render('quizzes/random_result', {
+        result,
+        answer,
+        score
     });
 };

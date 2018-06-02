@@ -37,5 +37,9 @@ quiz.hasMany(tip);
 user.hasMany(quiz, {foreignKey: 'authorId'});
 quiz.belongsTo(user, {as: 'author', foreignKey: 'authorId'});
 
+user.hasMany(tip,{foreignKey: 'authorId'});
+tip.belongsTo(user, {as:'author',foreignKey:'authorId'});
+//Solo por poner esto en tip.js aparece la columna correspondiente.
+
 
 module.exports = sequelize;
