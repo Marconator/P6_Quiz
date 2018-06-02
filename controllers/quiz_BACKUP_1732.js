@@ -228,7 +228,6 @@ exports.check = (req, res, next) => {
     });
 };
 
-<<<<<<< HEAD
 exports.random_play = (req,res,next) =>{
     req.session.random_play = req.session.random_play || [];
 
@@ -286,7 +285,6 @@ exports.randomcheck = (req, res, next) => {
         score
     });
 };
-=======
 exports.randomplay=(req,res,next)=>{
     if(req.session.randomplay===undefined){
         req.session.randomplay=[];
@@ -341,4 +339,3 @@ exports.randomcheck=(req,res,next)=>{
     }
 
 }
->>>>>>> practica6
